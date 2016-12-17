@@ -1,0 +1,13 @@
+stream_port=0
+output_pictures off
+movie_filename %Y/%m/%d/%H-%M-%S
+
+threshold 500
+width 640
+height 480
+framerate 15
+pre_capture 5
+post_capture 5
+
+netcam_url = rtsp://user:pass@example.com/Streaming/Channels/102
+target_dir /data/camera1
