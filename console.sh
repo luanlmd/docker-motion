@@ -29,7 +29,8 @@ function stop
 
 function restart
 {
-	docker restart $(docker ps -qf ancestor=motion)
+	stop
+	run
 }
 
 function clear
