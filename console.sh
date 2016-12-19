@@ -2,29 +2,33 @@
 
 function init
 {
-    docker pull ubuntu:zesty
-    build
+	docker pull ubuntu:zesty
+	build
 }
 
 function build
 {
-    docker build -t motion .
-    run
+	docker build -t motion .
+	run
 }
 
 function run
 {
-    docker run -v $(pwd)/data:/data -v $(pwd)/conf.d:/conf.d -v $(pwd)/log:/var/log/motion -d --restart=always motion
+	docker run -v $(pwd)/data:/data -v $(pwd)/conf.d:/conf.d -v $(pwd)/log:/var/log/motion -d --restart=always motion > container.pid
 }
 
 function ssh
 {
-	docker exec -i -t $(docker ps -qf ancestor=motion) /bin/bash -c "export TERM=xterm; exec bash"
+	docker exec -i -t $(< container.pid) /bin/bash -c "export TERM=xterm; exec bash"
 }
 
 function stop
 {
-	docker stop $(docker ps -qf ancestor=motion)
+	if [ -f "container.pid" ]; then
+		docker stop $(< container.pid)
+		docker rm $(< container.pid)
+		rm container.pid
+	fi
 }
 
 function restart
